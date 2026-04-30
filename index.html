@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kiran Barkat — Fashion Designer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #F7F2EA;
+      --sand: #EDE3D4;
+      --parchment: #E0D5C1;
+      --charcoal: #1A1714;
+      --warm-black: #0D0B09;
+      --dusty-rose: #C9A99A;
+      --blush: #E8C5B8;
+      --gold: #B8935A;
+      --gold-light: #D4AA70;
+      --muted: #7A6F66;
+      --accent: #8B2635;
+      --accent2: #5C3D2E;
+      --mauve: #9B7E8C;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ─── CURSOR ─── */
+    .cursor { width:10px;height:10px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:multiply; }
+    .cursor-ring { width:36px;height:36px;border:1px solid var(--charcoal);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); }
+
+    /* ─── NAV ─── */
+    nav {
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1.5rem 4rem;
+      background: rgba(247,242,234,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184,147,90,0.15);
+    }
+    .nav-logo { font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.25em;color:var(--charcoal);text-decoration:none; }
+    .nav-links { display:flex;gap:2.5rem;list-style:none; }
+    .nav-links a { font-size:0.72rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--charcoal);text-decoration:none;opacity:0.65;transition:opacity 0.2s; }
+    .nav-links a:hover { opacity:1; }
+
+    /* ─── ANIMATED BG PATTERN ─── */
+    .bg-pattern {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .bg-pattern svg { width:100%;height:100%;opacity:0.045; }
+
+    /* ─── HERO ─── */
+    #header {
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-bg-gradient {
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 80% 10%, rgba(201,169,154,0.35) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 90%, rgba(184,147,90,0.2) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(232,197,184,0.15) 0%, transparent 70%);
+      z-index:0;
+    }
+    .hero-left {
+      display:flex;flex-direction:column;justify-content:flex-end;
+      padding:8rem 4rem 5rem 4rem;position:relative;z-index:2;
+    }
+    .hero-label { font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s 0.2s forwards; }
+    .hero-name { font-family:'Bebas Neue',sans-serif;font-size:clamp(4.5rem,8vw,8.5rem);line-height:0.92;letter-spacing:0.02em;color:var(--charcoal);opacity:0;animation:fadeUp 0.9s 0.4s forwards; }
+    .hero-name span { color:var(--accent); }
+    .hero-tagline { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.45rem;color:var(--muted);margin-top:2rem;max-width:380px;line-height:1.55;opacity:0;animation:fadeUp 0.9s 0.6s forwards; }
+    .hero-scroll-hint { margin-top:3.5rem;display:flex;align-items:center;gap:1rem;opacity:0;animation:fadeUp 0.9s 1s forwards; }
+    .scroll-line { width:60px;height:1px;background:var(--muted);display:block;position:relative;overflow:hidden; }
+    .scroll-line::after { content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--accent);animation:lineSlide 2s 1.5s infinite; }
+    .scroll-text { font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted); }
+
+    /* HERO RIGHT — profile + floating dress illus */
+    .hero-right {
+      position:relative;overflow:hidden;
+      background: linear-gradient(135deg, var(--sand) 0%, var(--parchment) 100%);
+      opacity:0;animation:fadeIn 1.2s 0.3s forwards;
+    }
+    .hero-right-decor {
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 70% 20%, rgba(184,147,90,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 85%, rgba(201,169,154,0.28) 0%, transparent 50%);
+    }
+    /* ghost text */
+    .hero-ghost-text {
+      position:absolute;bottom:3rem;right:-1rem;
+      font-family:'Bebas Neue',sans-serif;font-size:clamp(6rem,13vw,16rem);
+      line-height:1;color:transparent;-webkit-text-stroke:1px rgba(26,23,20,0.09);
+      writing-mode:vertical-rl;user-select:none;pointer-events:none;
+    }
+    /* profile circle */
+    .profile-frame {
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);
+      width:220px;height:220px;z-index:3;
+    }
+    .profile-ring {
+      width:220px;height:220px;border-radius:50%;
+      border:2px solid var(--gold);
+      display:flex;align-items:center;justify-content:center;
+      background: radial-gradient(circle at 40% 35%, var(--blush) 0%, var(--dusty-rose) 60%, var(--mauve) 100%);
+      box-shadow: 0 20px 60px rgba(139,38,53,0.2), 0 4px 20px rgba(184,147,90,0.3);
+      overflow:hidden;
+    }
+    .profile-initials {
+      font-family:'Bebas Neue',sans-serif;font-size:5rem;letter-spacing:0.05em;
+      color:rgba(255,255,255,0.9);user-select:none;text-shadow:0 2px 20px rgba(139,38,53,0.4);
+    }
+    .profile-name-tag {
+      position:absolute;bottom:-1.5rem;left:50%;transform:translateX(-50%);
+      background:var(--warm-black);color:var(--gold);
+      font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;
+      padding:0.4rem 1.2rem;white-space:nowrap;
+    }
+    /* floating dress silhouettes */
+    .float-dress {
+      position:absolute;z-index:2;
+      animation:floatDress 5s ease-in-out infinite;
+    }
+    .float-dress:nth-child(2) { animation-delay:-1.5s; }
+    .float-dress:nth-child(3) { animation-delay:-3s; }
+
+    @keyframes floatDress { 0%,100%{transform:translateY(0) rotate(var(--rot,0deg));} 50%{transform:translateY(-12px) rotate(var(--rot,0deg));} }
+
+    /* city pill */
+    .hero-city-pill {
+      position:absolute;top:5rem;left:2.5rem;z-index:4;
+      background:rgba(26,23,20,0.07);backdrop-filter:blur(8px);
+      border:1px solid rgba(184,147,90,0.3);
+      padding:0.5rem 1.1rem;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);
+      display:flex;align-items:center;gap:0.5rem;
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding:7rem 4rem;max-width:1200px;margin:0 auto; }
+    .section-tag { font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem; }
+    .section-tag::before { content:'';display:block;width:28px;height:1px;background:var(--gold); }
+    .section-title { font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,6vw,5.5rem);letter-spacing:0.04em;line-height:1;color:var(--charcoal); }
+
+    /* ─── ABOUT ─── */
+    #about {
+      display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:center;
+      border-top:1px solid rgba(26,23,20,0.1);
+    }
+    .about-left { position:relative; }
+    .about-number { font-family:'Bebas Neue',sans-serif;font-size:13rem;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(26,23,20,0.06);position:absolute;top:-3rem;left:-2rem;user-select:none;pointer-events:none; }
+    .about-right p { font-family:'Cormorant Garamond',serif;font-size:1.4rem;line-height:1.75;color:var(--charcoal);margin-top:2rem;font-weight:300; }
+    .about-right p strong { font-weight:600;color:var(--accent); }
+    .about-details { margin-top:2.5rem;display:flex;gap:2.5rem;flex-wrap:wrap; }
+    .about-detail-item label { font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.4rem; }
+    .about-detail-item span { font-size:0.9rem;font-weight:500;color:var(--charcoal); }
+
+    /* mood board row under about */
+    .moodboard-row {
+      max-width:1200px;margin:0 auto;padding:0 4rem 5rem;
+      display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;
+    }
+    .moodboard-card {
+      border-radius:0;overflow:hidden;position:relative;
+      aspect-ratio:3/4;
+      background:var(--sand);
+      border:1px solid rgba(184,147,90,0.2);
+      transition:transform 0.3s ease, box-shadow 0.3s;
+    }
+    .moodboard-card:hover { transform:translateY(-6px);box-shadow:0 20px 50px rgba(26,23,20,0.12); }
+    .moodboard-card:nth-child(2) { margin-top:2rem; }
+    .moodboard-card:nth-child(4) { margin-top:1rem; }
+    .moodboard-card svg { width:100%;height:100%; }
+    .moodboard-label {
+      position:absolute;bottom:0;left:0;right:0;
+      padding:0.8rem 1rem;
+      background:linear-gradient(transparent, rgba(13,11,9,0.6));
+      color:rgba(245,240,232,0.85);
+      font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;
+    }
+
+    /* ─── SKILLS ─── */
+    #skills { background:var(--warm-black);max-width:100%;padding:7rem 4rem;position:relative;overflow:hidden; }
+    #skills::before {
+      content:'';position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(184,147,90,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 80%, rgba(139,38,53,0.1) 0%, transparent 50%);
+    }
+    #skills .inner { max-width:1200px;margin:0 auto;position:relative;z-index:1; }
+    #skills .section-tag { color:var(--gold); }
+    #skills .section-tag::before { background:var(--gold); }
+    #skills .section-title { color:var(--cream); }
+    .skills-grid { margin-top:4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.06); }
+    .skill-card {
+      padding:2.5rem;background:var(--warm-black);position:relative;overflow:hidden;
+      transition:background 0.3s;
+    }
+    .skill-card::after { content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--accent));transition:width 0.4s ease; }
+    .skill-card:hover::after { width:100%; }
+    .skill-card:hover { background:rgba(245,240,232,0.03); }
+    .skill-icon { font-size:1.8rem;margin-bottom:1.2rem; }
+    .skill-name { font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:0.06em;color:var(--cream);margin-bottom:0.6rem; }
+    .skill-desc { font-size:0.78rem;color:rgba(245,240,232,0.42);line-height:1.65; }
+    .skill-number { position:absolute;top:1.5rem;right:1.8rem;font-family:'Cormorant Garamond',serif;font-size:3rem;color:rgba(245,240,232,0.04);font-style:italic;user-select:none; }
+
+    /* ─── FASHION ILLUSTRATIONS STRIP ─── */
+    .illus-strip {
+      background: linear-gradient(135deg, var(--parchment), var(--sand));
+      padding: 5rem 4rem;
+      border-top:1px solid rgba(184,147,90,0.15);
+      border-bottom:1px solid rgba(184,147,90,0.15);
+      position:relative;overflow:hidden;
+    }
+    .illus-strip-title {
+      max-width:1200px;margin:0 auto 3rem;
+      font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,4rem);
+      letter-spacing:0.08em;color:var(--charcoal);opacity:0.35;
+      text-align:center;
+    }
+    .illus-row {
+      max-width:1200px;margin:0 auto;
+      display:flex;gap:2rem;align-items:flex-end;justify-content:center;
+    }
+    .illus-item {
+      flex:1;max-width:200px;display:flex;flex-direction:column;align-items:center;gap:1rem;
+      animation:floatDress 4s ease-in-out infinite;
+    }
+    .illus-item:nth-child(2) { animation-delay:-1.2s;margin-bottom:1.5rem; }
+    .illus-item:nth-child(3) { animation-delay:-0.6s; }
+    .illus-item:nth-child(4) { animation-delay:-2s;margin-bottom:2rem; }
+    .illus-item:nth-child(5) { animation-delay:-1.8s; }
+    .illus-caption { font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted); }
+
+    /* ─── PROJECTS ─── */
+    #projects { max-width:100%;padding:7rem 4rem;border-top:1px solid rgba(26,23,20,0.1); }
+    .projects-inner { max-width:1200px;margin:0 auto; }
+    .projects-grid { margin-top:4rem;display:flex;flex-direction:column;gap:2px; }
+    .project-card {
+      display:grid;grid-template-columns:1fr 1fr;overflow:hidden;
+      border:1px solid rgba(26,23,20,0.1);
+      transition:transform 0.35s,box-shadow 0.35s;
+    }
+    .project-card:hover { transform:translateY(-5px);box-shadow:0 28px 70px rgba(26,23,20,0.13); }
+    .project-image { background:var(--sand);min-height:420px;position:relative;overflow:hidden; }
+    .project-image svg { width:100%;height:100%;display:block; }
+    .project-content { padding:3.5rem;display:flex;flex-direction:column;justify-content:center;background:var(--warm-black);color:var(--cream); }
+    .project-year { font-size:0.65rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1.5rem; }
+    .project-name { font-family:'Bebas Neue',sans-serif;font-size:3.2rem;letter-spacing:0.04em;line-height:1;margin-bottom:1.5rem; }
+    .project-desc { font-family:'Cormorant Garamond',serif;font-size:1.12rem;line-height:1.75;color:rgba(245,240,232,0.7);margin-bottom:2rem;font-weight:300; }
+    .project-tags { display:flex;flex-wrap:wrap;gap:0.6rem; }
+    .project-tag { font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.4rem 1rem;border:1px solid rgba(245,240,232,0.18);color:rgba(245,240,232,0.55); }
+
+    /* ─── CONTACT ─── */
+    #contact { display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;border-top:1px solid rgba(26,23,20,0.1); }
+    .contact-big { font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,7vw,7.5rem);line-height:0.95;letter-spacing:0.03em;margin-top:1.5rem; }
+    .contact-big em { color:var(--accent);font-style:normal; }
+    .contact-intro { font-family:'Cormorant Garamond',serif;font-size:1.2rem;line-height:1.7;color:var(--muted);margin-bottom:3rem;font-style:italic; }
+    .contact-links { display:flex;flex-direction:column;gap:0; }
+    .contact-link {
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1.4rem 0;border-bottom:1px solid rgba(26,23,20,0.1);
+      text-decoration:none;color:var(--charcoal);transition:all 0.28s;position:relative;overflow:hidden;
+    }
+    .contact-link::before { content:'';position:absolute;left:-100%;top:0;bottom:0;width:100%;background:var(--sand);transition:left 0.35s ease;z-index:0; }
+    .contact-link:hover::before { left:0; }
+    .contact-link:hover { padding-left:1rem; }
+    .contact-link-left { display:flex;align-items:center;gap:1.2rem;position:relative;z-index:1; }
+    .contact-icon { width:36px;height:36px;border:1px solid rgba(26,23,20,0.15);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0; }
+    .contact-label { font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);display:block; }
+    .contact-val { font-size:0.86rem;font-weight:500;color:var(--charcoal); }
+    .contact-arrow { font-size:1.1rem;opacity:0.3;transition:opacity 0.2s,transform 0.2s;position:relative;z-index:1; }
+    .contact-link:hover .contact-arrow { opacity:1;transform:translateX(4px); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background:var(--warm-black);color:rgba(245,240,232,0.3);
+      padding:2.5rem 4rem;display:flex;align-items:center;justify-content:space-between;
+    }
+    .footer-name { font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.2em;color:rgba(245,240,232,0.6); }
+    .footer-copy { font-size:0.7rem;letter-spacing:0.1em; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn { from{opacity:0;}to{opacity:1;} }
+    @keyframes lineSlide { 0%{left:-100%;}100%{left:200%;} }
+    @keyframes floatDress { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+    @keyframes spin-slow { from{transform:rotate(0deg);}to{transform:rotate(360deg);} }
+
+    .reveal { opacity:0;transform:translateY(26px);transition:opacity 0.8s ease,transform 0.8s ease; }
+    .reveal.visible { opacity:1;transform:translateY(0); }
+
+    /* ─── DECORATIVE ELEMENTS ─── */
+    .deco-circle {
+      position:absolute;border-radius:50%;border:1px solid rgba(184,147,90,0.12);
+      pointer-events:none;animation:spin-slow 30s linear infinite;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:900px){
+      #header{grid-template-columns:1fr;}
+      .hero-right{display:none;}
+      nav{padding:1.2rem 2rem;}
+      .nav-links{display:none;}
+      section,#skills,#projects,#contact,#about{padding:4rem 2rem;}
+      #about,#contact{grid-template-columns:1fr;gap:3rem;}
+      .project-card{grid-template-columns:1fr;}
+      .moodboard-row{grid-template-columns:1fr 1fr;padding:0 2rem 4rem;}
+      .skills-grid{grid-template-columns:1fr 1fr;}
+      .illus-row{flex-wrap:wrap;}
+      footer{flex-direction:column;gap:0.8rem;text-align:center;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- BG PATTERN -->
+<div class="bg-pattern">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+        <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#8B2635" stroke-width="0.5"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)"/>
+    <circle cx="200" cy="200" r="180" fill="none" stroke="#B8935A" stroke-width="0.5"/>
+    <circle cx="1000" cy="600" r="250" fill="none" stroke="#C9A99A" stroke-width="0.5"/>
+    <circle cx="600" cy="400" r="120" fill="none" stroke="#8B2635" stroke-width="0.3"/>
+  </svg>
+</div>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#header" class="nav-logo">Kiran Barkat</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div id="header">
+  <div class="hero-bg-gradient"></div>
+
+  <!-- decorative circles -->
+  <div class="deco-circle" style="width:600px;height:600px;top:-200px;left:-200px;"></div>
+  <div class="deco-circle" style="width:300px;height:300px;bottom:50px;left:300px;animation-direction:reverse;animation-duration:20s;"></div>
+
+  <div class="hero-left">
+    <span class="hero-label">Fashion Designer — Los Angeles, CA</span>
+    <h1 class="hero-name">Kiran<br><span>Barkat</span></h1>
+    <p class="hero-tagline">Crafting wearable stories where culture, texture, and intention meet on every seam</p>
+    <div class="hero-scroll-hint">
+      <span class="scroll-line"></span>
+      <span class="scroll-text">Scroll to explore</span>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-right-decor"></div>
+    <div class="hero-ghost-text">MODE</div>
+    <div class="hero-city-pill">📍 Los Angeles, CA</div>
+
+    <!-- Profile -->
+    <div class="profile-frame">
+      <div class="profile-ring">
+        <span class="profile-initials">KB</span>
+      </div>
+      <div class="profile-name-tag">Kiran Barkat · Designer</div>
+    </div>
+
+    <!-- Floating dress 1 — top left -->
+    <div class="float-dress" style="top:8%;left:4%;--rot:-5deg;">
+      <svg width="80" height="140" viewBox="0 0 80 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="40" cy="18" rx="14" ry="16" fill="#C9A99A" opacity="0.7"/>
+        <path d="M26 34 C18 38 8 50 6 80 C4 110 10 130 20 134 L60 134 C70 130 76 110 74 80 C72 50 62 38 54 34 Z" fill="#8B2635" opacity="0.75"/>
+        <path d="M26 34 L20 28 L18 24 C22 22 30 20 40 20 C50 20 58 22 62 24 L60 28 L54 34" fill="#B8935A" opacity="0.6"/>
+        <path d="M6 80 Q40 90 74 80" stroke="rgba(245,240,232,0.3)" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+
+    <!-- Floating dress 2 — bottom right -->
+    <div class="float-dress" style="bottom:12%;right:4%;--rot:6deg;">
+      <svg width="70" height="130" viewBox="0 0 70 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="35" cy="15" rx="12" ry="13" fill="#E8C5B8" opacity="0.8"/>
+        <path d="M23 28 C16 32 10 50 8 75 C6 100 10 118 18 122 L52 122 C60 118 64 100 62 75 C60 50 54 32 47 28 Z" fill="#5C3D2E" opacity="0.7"/>
+        <rect x="22" y="26" width="26" height="8" rx="2" fill="#B8935A" opacity="0.6"/>
+        <!-- buttons -->
+        <circle cx="35" cy="45" r="2" fill="rgba(245,240,232,0.4)"/>
+        <circle cx="35" cy="58" r="2" fill="rgba(245,240,232,0.4)"/>
+        <circle cx="35" cy="71" r="2" fill="rgba(245,240,232,0.4)"/>
+      </svg>
+    </div>
+
+    <!-- Floating skirt — top right -->
+    <div class="float-dress" style="top:5%;right:8%;--rot:3deg;">
+      <svg width="65" height="100" viewBox="0 0 65 100" fill="none">
+        <path d="M10 10 C10 10 15 4 32 4 C49 4 55 10 55 10 L60 95 L5 95 Z" fill="#9B7E8C" opacity="0.65"/>
+        <path d="M10 10 L55 10" stroke="rgba(245,240,232,0.4)" stroke-width="1.5"/>
+        <path d="M8 35 C8 35 30 42 57 35" stroke="rgba(245,240,232,0.2)" stroke-width="1" fill="none"/>
+        <path d="M5 60 C5 60 28 68 60 60" stroke="rgba(245,240,232,0.15)" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════ ABOUT ═══════════════════ -->
+<section id="about">
+  <div class="about-left">
+    <div class="section-tag">About Me</div>
+    <h2 class="section-title">The<br>Vision</h2>
+    <div class="about-number">01</div>
+  </div>
+  <div class="about-right reveal">
+    <p>
+      I'm <strong>Kiran Barkat</strong>, a Los Angeles–based fashion designer with a passion for creating collections that blur the line between art and everyday wear. My design philosophy is rooted in cultural storytelling — drawing inspiration from the rich textures, colors, and rhythms of the city I call home.
+    </p>
+    <p style="margin-top:1.2rem;">
+      With a background in garment construction and sustainable fashion practices, I design pieces that are as conscientious as they are beautiful — built to last, built to mean something.
+    </p>
+    <div class="about-details">
+      <div class="about-detail-item"><label>Based in</label><span>Los Angeles, CA</span></div>
+      <div class="about-detail-item"><label>Focus</label><span>Ready-to-Wear & Editorial</span></div>
+      <div class="about-detail-item"><label>Style</label><span>Avant-garde / Sustainable</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MOOD BOARDS -->
+<div class="moodboard-row">
+
+  <!-- Board 1: Earthy tones -->
+  <div class="moodboard-card reveal">
+    <svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="280" fill="#E8DDD0"/>
+      <rect x="0" y="0" width="200" height="80" fill="#8B2635" opacity="0.8"/>
+      <rect x="0" y="80" width="200" height="80" fill="#B8935A" opacity="0.7"/>
+      <rect x="0" y="160" width="200" height="60" fill="#5C3D2E" opacity="0.65"/>
+      <rect x="0" y="220" width="200" height="60" fill="#C9A99A" opacity="0.8"/>
+      <!-- fabric texture lines -->
+      <line x1="0" y1="100" x2="200" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+      <line x1="0" y1="120" x2="200" y2="120" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+      <text x="100" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="rgba(245,240,232,0.9)" letter-spacing="3">EARTH</text>
+      <text x="100" y="58" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="rgba(245,240,232,0.6)" letter-spacing="2">COLLECTION</text>
+    </svg>
+    <div class="moodboard-label">Colour Palette</div>
+  </div>
+
+  <!-- Board 2: Dress illustration board -->
+  <div class="moodboard-card reveal" style="background:#1A1714;">
+    <svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="280" fill="#1A1714"/>
+      <!-- fashion figure -->
+      <ellipse cx="100" cy="45" rx="18" ry="20" fill="#C9A99A" opacity="0.8"/>
+      <!-- neck -->
+      <rect x="94" y="62" width="12" height="12" fill="#C9A99A" opacity="0.7"/>
+      <!-- torso/bodice -->
+      <path d="M72 74 C72 74 80 70 100 70 C120 70 128 74 128 74 L132 130 L68 130 Z" fill="#8B2635" opacity="0.85"/>
+      <!-- collar -->
+      <path d="M88 70 L100 84 L112 70" fill="none" stroke="rgba(184,147,90,0.7)" stroke-width="1.5"/>
+      <!-- skirt -->
+      <path d="M68 130 L55 240 L145 240 L132 130 Z" fill="#5C3D2E" opacity="0.8"/>
+      <!-- waistband -->
+      <rect x="68" y="126" width="64" height="8" fill="#B8935A" opacity="0.7"/>
+      <!-- arms -->
+      <path d="M72 80 L54 120" stroke="#C9A99A" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+      <path d="M128 80 L146 120" stroke="#C9A99A" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+      <!-- legs -->
+      <path d="M80 240 L76 268" stroke="#C9A99A" stroke-width="7" stroke-linecap="round" opacity="0.6"/>
+      <path d="M120 240 L124 268" stroke="#C9A99A" stroke-width="7" stroke-linecap="round" opacity="0.6"/>
+      <!-- shoes -->
+      <ellipse cx="75" cy="270" rx="10" ry="4" fill="#1A1714" stroke="#B8935A" stroke-width="1" opacity="0.9"/>
+      <ellipse cx="125" cy="270" rx="10" ry="4" fill="#1A1714" stroke="#B8935A" stroke-width="1" opacity="0.9"/>
+      <!-- hair -->
+      <path d="M82 34 C80 20 90 14 100 14 C110 14 120 20 118 34" fill="#2C1810" opacity="0.9"/>
+      <path d="M82 34 C78 50 80 58 82 62" fill="#2C1810" opacity="0.7"/>
+      <path d="M118 34 C122 50 120 58 118 62" fill="#2C1810" opacity="0.7"/>
+      <!-- embellishments on skirt -->
+      <circle cx="95" cy="170" r="2" fill="#B8935A" opacity="0.5"/>
+      <circle cx="105" cy="185" r="2" fill="#B8935A" opacity="0.5"/>
+      <circle cx="92" cy="200" r="2" fill="#B8935A" opacity="0.5"/>
+      <circle cx="108" cy="215" r="2" fill="#B8935A" opacity="0.5"/>
+    </svg>
+    <div class="moodboard-label">Design Sketch</div>
+  </div>
+
+  <!-- Board 3: Texture / fabric -->
+  <div class="moodboard-card reveal">
+    <svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="280" fill="#EDE3D4"/>
+      <defs>
+        <pattern id="weave" width="8" height="8" patternUnits="userSpaceOnUse">
+          <rect width="4" height="4" fill="rgba(139,38,53,0.25)"/>
+          <rect x="4" y="4" width="4" height="4" fill="rgba(139,38,53,0.25)"/>
+        </pattern>
+        <pattern id="stripe" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="6" height="12" fill="rgba(184,147,90,0.3)"/>
+        </pattern>
+      </defs>
+      <rect x="10" y="10" width="80" height="80" fill="url(#weave)" rx="2"/>
+      <rect x="110" y="10" width="80" height="80" fill="url(#stripe)" rx="2"/>
+      <rect x="10" y="10" width="80" height="80" fill="none" stroke="rgba(26,23,20,0.12)" stroke-width="1" rx="2"/>
+      <rect x="110" y="10" width="80" height="80" fill="none" stroke="rgba(26,23,20,0.12)" stroke-width="1" rx="2"/>
+      <!-- fabric swatches lower -->
+      <rect x="10" y="110" width="180" height="50" fill="#8B2635" opacity="0.15" rx="2"/>
+      <rect x="10" y="170" width="180" height="50" fill="#B8935A" opacity="0.2" rx="2"/>
+      <rect x="10" y="230" width="180" height="40" fill="#9B7E8C" opacity="0.25" rx="2"/>
+      <!-- labels -->
+      <text x="50" y="56" text-anchor="middle" font-size="7" fill="#5C3D2E" opacity="0.7" letter-spacing="1">TWEED</text>
+      <text x="150" y="56" text-anchor="middle" font-size="7" fill="#5C3D2E" opacity="0.7" letter-spacing="1">LINEN</text>
+      <text x="100" y="140" text-anchor="middle" font-size="7" fill="#8B2635" opacity="0.7" letter-spacing="1">SILK CREPE</text>
+      <text x="100" y="200" text-anchor="middle" font-size="7" fill="#5C3D2E" opacity="0.7" letter-spacing="1">RAW LINEN</text>
+      <text x="100" y="257" text-anchor="middle" font-size="7" fill="#5C3D2E" opacity="0.7" letter-spacing="1">MAUVE SATIN</text>
+    </svg>
+    <div class="moodboard-label">Fabric Swatches</div>
+  </div>
+
+  <!-- Board 4: Inspiration / editorial -->
+  <div class="moodboard-card reveal" style="background:#F0E8DC;">
+    <svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="280" fill="#F0E8DC"/>
+      <!-- abstract fashion shapes -->
+      <path d="M30 20 L80 20 L95 80 L15 80 Z" fill="#8B2635" opacity="0.7"/>
+      <path d="M110 20 L185 20 L185 90 L110 90 Z" fill="#C9A99A" opacity="0.6"/>
+      <circle cx="60" cy="130" r="45" fill="none" stroke="#B8935A" stroke-width="1.5" opacity="0.6"/>
+      <circle cx="60" cy="130" r="30" fill="#9B7E8C" opacity="0.2"/>
+      <path d="M110 100 L190 100 L190 170 L140 170 L130 180 L110 180 Z" fill="#5C3D2E" opacity="0.5"/>
+      <!-- bottom strip inspirational -->
+      <rect x="0" y="200" width="200" height="80" fill="#1A1714" opacity="0.08"/>
+      <text x="100" y="232" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#8B2635" letter-spacing="2">KIRAN</text>
+      <text x="100" y="250" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#7A6F66" letter-spacing="3">BARKAT</text>
+      <line x1="30" y1="258" x2="170" y2="258" stroke="#B8935A" stroke-width="0.5" opacity="0.6"/>
+      <text x="100" y="270" text-anchor="middle" font-size="6" fill="#7A6F66" letter-spacing="2">LOS ANGELES</text>
+    </svg>
+    <div class="moodboard-label">Editorial Board</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ SKILLS ═══════════════════ -->
+<div id="skills">
+  <div class="inner">
+    <div class="section-tag">Expertise</div>
+    <h2 class="section-title">Skills</h2>
+    <div class="skills-grid">
+
+      <div class="skill-card reveal">
+        <span class="skill-number">01</span>
+        <div class="skill-icon">✂️</div>
+        <div class="skill-name">Garment Construction</div>
+        <div class="skill-desc">Pattern drafting, draping, sewing and tailoring across woven and knit fabrics for couture and ready-to-wear.</div>
+      </div>
+
+      <div class="skill-card reveal">
+        <span class="skill-number">02</span>
+        <div class="skill-icon">🎨</div>
+        <div class="skill-name">Textile & Fabric Sourcing</div>
+        <div class="skill-desc">Identifying and curating sustainable, ethically-sourced fabrics with deep knowledge of weaves, weights, and finishes.</div>
+      </div>
+
+      <div class="skill-card reveal">
+        <span class="skill-number">03</span>
+        <div class="skill-icon">📐</div>
+        <div class="skill-name">CLO3D / Adobe Illustrator</div>
+        <div class="skill-desc">Digital fashion design and tech pack creation using industry-standard 3D simulation and vector illustration tools.</div>
+      </div>
+
+      <div class="skill-card reveal">
+        <span class="skill-number">04</span>
+        <div class="skill-icon">🌿</div>
+        <div class="skill-name">Sustainable Design</div>
+        <div class="skill-desc">Implementing zero-waste cutting techniques, upcycling processes, and eco-conscious production workflows.</div>
+      </div>
+
+      <div class="skill-card reveal">
+        <span class="skill-number">05</span>
+        <div class="skill-icon">🖊️</div>
+        <div class="skill-name">Fashion Illustration</div>
+        <div class="skill-desc">Hand-sketching and digital rendering of design concepts, mood boards, and collection lookbooks.</div>
+      </div>
+
+      <div class="skill-card reveal">
+        <span class="skill-number">06</span>
+        <div class="skill-icon">💼</div>
+        <div class="skill-name">Brand Development</div>
+        <div class="skill-desc">Building cohesive visual identities, seasonal narratives, and editorial storytelling for fashion collections.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ILLUSTRATION STRIP ═══════════════════ -->
+<div class="illus-strip">
+  <div class="illus-strip-title">Collection Silhouettes</div>
+  <div class="illus-row">
+
+    <!-- Figure 1: Flowing gown -->
+    <div class="illus-item reveal">
+      <svg width="100" height="220" viewBox="0 0 100 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- head -->
+        <ellipse cx="50" cy="22" rx="14" ry="16" fill="#C9A99A"/>
+        <!-- hair up -->
+        <ellipse cx="50" cy="12" rx="12" ry="8" fill="#2C1810"/>
+        <circle cx="50" cy="6" r="5" fill="#2C1810"/>
+        <!-- neck -->
+        <rect x="44" y="36" width="12" height="10" fill="#C9A99A"/>
+        <!-- sleeveless bodice -->
+        <path d="M34 46 L66 46 L64 80 L36 80 Z" fill="#8B2635"/>
+        <!-- spaghetti straps -->
+        <line x1="42" y1="36" x2="40" y2="46" stroke="#8B2635" stroke-width="2"/>
+        <line x1="58" y1="36" x2="60" y2="46" stroke="#8B2635" stroke-width="2"/>
+        <!-- flowing skirt -->
+        <path d="M36 80 C30 100 10 140 5 200 L95 200 C90 140 70 100 64 80 Z" fill="#8B2635" opacity="0.85"/>
+        <!-- skirt layers -->
+        <path d="M32 110 C25 125 12 155 8 190 L92 190 C88 155 75 125 68 110" fill="none" stroke="rgba(245,240,232,0.15)" stroke-width="1"/>
+        <!-- waist detail -->
+        <path d="M36 80 Q50 86 64 80" stroke="#B8935A" stroke-width="1.5" fill="none"/>
+        <!-- arms -->
+        <path d="M34 52 L22 90" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+        <path d="M66 52 L78 90" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <span class="illus-caption">Evening Gown</span>
+    </div>
+
+    <!-- Figure 2: Power suit -->
+    <div class="illus-item reveal">
+      <svg width="100" height="220" viewBox="0 0 100 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="22" rx="13" ry="15" fill="#C9A99A"/>
+        <!-- bun hair -->
+        <path d="M37 20 C37 8 63 8 63 20" fill="#2C1810"/>
+        <ellipse cx="50" cy="10" rx="10" ry="7" fill="#2C1810"/>
+        <rect x="44" y="35" width="12" height="10" fill="#C9A99A"/>
+        <!-- blazer -->
+        <path d="M28 45 L72 45 L70 130 L30 130 Z" fill="#5C3D2E"/>
+        <!-- lapels -->
+        <path d="M50 45 L42 65 L50 58 L58 65 Z" fill="#EDE3D4"/>
+        <!-- breast pocket -->
+        <rect x="56" y="58" width="10" height="7" fill="none" stroke="rgba(245,240,232,0.3)" stroke-width="0.8"/>
+        <!-- buttons -->
+        <circle cx="50" cy="78" r="2" fill="#B8935A"/>
+        <circle cx="50" cy="93" r="2" fill="#B8935A"/>
+        <circle cx="50" cy="108" r="2" fill="#B8935A"/>
+        <!-- trousers -->
+        <path d="M30 130 L28 210 L48 210 L50 155 L52 210 L72 210 L70 130 Z" fill="#1A1714"/>
+        <!-- crease lines -->
+        <line x1="38" y1="140" x2="36" y2="200" stroke="rgba(245,240,232,0.1)" stroke-width="0.8"/>
+        <line x1="62" y1="140" x2="64" y2="200" stroke="rgba(245,240,232,0.1)" stroke-width="0.8"/>
+        <!-- arms -->
+        <path d="M28 52 L18 120" stroke="#5C3D2E" stroke-width="9" stroke-linecap="round"/>
+        <path d="M72 52 L82 120" stroke="#5C3D2E" stroke-width="9" stroke-linecap="round"/>
+        <!-- hands/cuffs -->
+        <ellipse cx="17" cy="122" rx="5" ry="4" fill="#C9A99A"/>
+        <ellipse cx="83" cy="122" rx="5" ry="4" fill="#C9A99A"/>
+      </svg>
+      <span class="illus-caption">Power Suit</span>
+    </div>
+
+    <!-- Figure 3: Wrap dress -->
+    <div class="illus-item reveal">
+      <svg width="100" height="220" viewBox="0 0 100 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="22" rx="14" ry="16" fill="#C9A99A"/>
+        <!-- flowing hair -->
+        <path d="M36 18 C34 32 36 40 36 46" fill="#2C1810" opacity="0.9"/>
+        <path d="M64 18 C66 32 64 40 64 46" fill="#2C1810" opacity="0.9"/>
+        <path d="M36 18 C36 6 64 6 64 18" fill="#2C1810"/>
+        <rect x="44" y="36" width="12" height="10" fill="#C9A99A"/>
+        <!-- wrap dress -->
+        <path d="M36 46 C28 50 26 70 28 130 C30 170 35 200 40 210 L60 210 C65 200 70 170 72 130 C74 70 72 50 64 46 Z" fill="#9B7E8C" opacity="0.85"/>
+        <!-- wrap overlap -->
+        <path d="M50 46 C44 54 40 70 40 130 L64 46 Z" fill="#8B5A6E" opacity="0.5"/>
+        <!-- V-neckline -->
+        <path d="M36 46 L50 68 L64 46" fill="none" stroke="rgba(245,240,232,0.3)" stroke-width="1"/>
+        <!-- tie detail -->
+        <path d="M50 70 Q45 90 48 110" stroke="#B8935A" stroke-width="1.5" fill="none" opacity="0.7"/>
+        <!-- arms -->
+        <path d="M36 52 L24 100" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+        <path d="M64 52 L76 100" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <span class="illus-caption">Wrap Dress</span>
+    </div>
+
+    <!-- Figure 4: Structured jacket + skirt -->
+    <div class="illus-item reveal">
+      <svg width="100" height="220" viewBox="0 0 100 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="22" rx="13" ry="15" fill="#C9A99A"/>
+        <path d="M38 14 C38 6 62 6 62 14 L60 30 C56 26 44 26 40 30 Z" fill="#1A1714"/>
+        <rect x="44" y="35" width="12" height="10" fill="#C9A99A"/>
+        <!-- structured jacket -->
+        <path d="M30 45 L70 45 L68 100 L32 100 Z" fill="#B8935A" opacity="0.9"/>
+        <!-- jacket collar -->
+        <path d="M44 45 L50 56 L56 45" fill="none" stroke="#EDE3D4" stroke-width="1.5"/>
+        <!-- shoulder pads -->
+        <ellipse cx="28" cy="50" rx="8" ry="5" fill="#B8935A" opacity="0.7"/>
+        <ellipse cx="72" cy="50" rx="8" ry="5" fill="#B8935A" opacity="0.7"/>
+        <!-- midi skirt -->
+        <path d="M32 100 L25 200 L75 200 L68 100 Z" fill="#EDE3D4" opacity="0.9"/>
+        <!-- skirt pleat lines -->
+        <line x1="50" y1="105" x2="50" y2="195" stroke="rgba(26,23,20,0.12)" stroke-width="1"/>
+        <line x1="40" y1="106" x2="36" y2="193" stroke="rgba(26,23,20,0.08)" stroke-width="0.8"/>
+        <line x1="60" y1="106" x2="64" y2="193" stroke="rgba(26,23,20,0.08)" stroke-width="0.8"/>
+        <!-- belt -->
+        <rect x="32" y="96" width="36" height="8" fill="#5C3D2E" rx="1"/>
+        <rect x="47" y="97" width="6" height="6" fill="#B8935A" rx="0.5"/>
+        <!-- arms -->
+        <path d="M30 50 L20 95" stroke="#B8935A" stroke-width="9" stroke-linecap="round"/>
+        <path d="M70 50 L80 95" stroke="#B8935A" stroke-width="9" stroke-linecap="round"/>
+        <ellipse cx="19" cy="97" rx="5" ry="4" fill="#C9A99A"/>
+        <ellipse cx="81" cy="97" rx="5" ry="4" fill="#C9A99A"/>
+      </svg>
+      <span class="illus-caption">Structured Jacket</span>
+    </div>
+
+    <!-- Figure 5: Boho maxi -->
+    <div class="illus-item reveal">
+      <svg width="100" height="220" viewBox="0 0 100 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="22" rx="14" ry="16" fill="#C9A99A"/>
+        <!-- wavy hair -->
+        <path d="M36 16 C32 28 30 40 32 55" fill="#2C1810" opacity="0.85"/>
+        <path d="M64 16 C68 28 70 40 68 55" fill="#2C1810" opacity="0.85"/>
+        <path d="M36 16 C38 4 62 4 64 16" fill="#2C1810"/>
+        <rect x="44" y="36" width="12" height="10" fill="#C9A99A"/>
+        <!-- boho top -->
+        <path d="M36 46 L64 46 L62 80 L38 80 Z" fill="#EDE3D4" opacity="0.9"/>
+        <!-- embroidery detail -->
+        <circle cx="46" cy="58" r="3" fill="none" stroke="#B8935A" stroke-width="0.8"/>
+        <circle cx="54" cy="58" r="3" fill="none" stroke="#8B2635" stroke-width="0.8"/>
+        <circle cx="50" cy="66" r="3" fill="none" stroke="#9B7E8C" stroke-width="0.8"/>
+        <!-- maxi skirt flowing -->
+        <path d="M38 80 C32 100 15 140 8 215 L92 215 C85 140 68 100 62 80 Z" fill="#C9A99A" opacity="0.75"/>
+        <!-- flowy layers -->
+        <path d="M35 108 C28 125 16 160 10 205 L90 205 C84 160 72 125 65 108" fill="rgba(245,240,232,0.2)"/>
+        <!-- fringe at bottom -->
+        <line x1="15" y1="210" x2="12" y2="218" stroke="#B8935A" stroke-width="1" opacity="0.6"/>
+        <line x1="25" y1="212" x2="22" y2="220" stroke="#B8935A" stroke-width="1" opacity="0.6"/>
+        <line x1="75" y1="212" x2="78" y2="220" stroke="#B8935A" stroke-width="1" opacity="0.6"/>
+        <line x1="85" y1="210" x2="88" y2="218" stroke="#B8935A" stroke-width="1" opacity="0.6"/>
+        <!-- arms with bangles -->
+        <path d="M36 52 L22 95" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+        <path d="M64 52 L78 95" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+        <ellipse cx="22" cy="88" rx="5" ry="3" fill="none" stroke="#B8935A" stroke-width="1.2"/>
+        <ellipse cx="78" cy="88" rx="5" ry="3" fill="none" stroke="#B8935A" stroke-width="1.2"/>
+      </svg>
+      <span class="illus-caption">Boho Maxi</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════ PROJECTS ═══════════════════ -->
+<div id="projects">
+  <div class="projects-inner">
+    <div class="reveal">
+      <div class="section-tag">Work</div>
+      <h2 class="section-title">Projects</h2>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-image">
+          <svg viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg" style="min-height:420px;">
+            <rect width="500" height="420" fill="#E8DDD0"/>
+            <!-- bg gradient -->
+            <defs>
+              <radialGradient id="projGrad" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#C9A99A" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#8B2635" stop-opacity="0.15"/>
+              </radialGradient>
+            </defs>
+            <rect width="500" height="420" fill="url(#projGrad)"/>
+            <!-- 3 fashion figures for the collection -->
+            <!-- Figure A -->
+            <g transform="translate(60,30) scale(0.85)">
+              <ellipse cx="50" cy="22" rx="13" ry="15" fill="#C9A99A"/>
+              <path d="M37 14 C37 4 63 4 63 14" fill="#2C1810"/>
+              <rect x="44" y="35" width="12" height="10" fill="#C9A99A"/>
+              <path d="M30 45 L70 45 L65 130 L35 130 Z" fill="#8B2635" opacity="0.85"/>
+              <path d="M44 45 L50 58 L56 45" fill="none" stroke="rgba(245,240,232,0.4)" stroke-width="1.5"/>
+              <path d="M35 130 L25 250 L75 250 L65 130 Z" fill="#5C3D2E" opacity="0.8"/>
+              <rect x="35" y="126" width="30" height="8" fill="#B8935A" opacity="0.7"/>
+              <path d="M30 52 L18 110" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+              <path d="M70 52 L82 110" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+            </g>
+            <!-- Figure B (center, taller) -->
+            <g transform="translate(175,10) scale(1.0)">
+              <ellipse cx="50" cy="22" rx="14" ry="16" fill="#C9A99A"/>
+              <path d="M36 16 C34 30 36 40 36 46" fill="#2C1810"/>
+              <path d="M64 16 C66 30 64 40 64 46" fill="#2C1810"/>
+              <path d="M36 16 C38 4 62 4 64 16" fill="#2C1810"/>
+              <rect x="44" y="36" width="12" height="10" fill="#C9A99A"/>
+              <path d="M32 46 L68 46 L66 85 L34 85 Z" fill="#9B7E8C" opacity="0.9"/>
+              <path d="M46 46 L50 62 L54 46" fill="none" stroke="rgba(245,240,232,0.35)" stroke-width="1.2"/>
+              <path d="M34 85 C28 110 12 160 8 270 L92 270 C88 160 72 110 66 85 Z" fill="#9B7E8C" opacity="0.8"/>
+              <path d="M30 115 C25 135 14 175 10 255 L90 255 C86 175 75 135 70 115" fill="rgba(245,240,232,0.08)"/>
+              <path d="M32 52 L20 108" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+              <path d="M68 52 L80 108" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+            </g>
+            <!-- Figure C -->
+            <g transform="translate(310,40) scale(0.85)">
+              <ellipse cx="50" cy="22" rx="13" ry="15" fill="#C9A99A"/>
+              <ellipse cx="50" cy="10" rx="12" ry="8" fill="#2C1810"/>
+              <circle cx="50" cy="5" r="5" fill="#2C1810"/>
+              <rect x="44" y="35" width="12" height="10" fill="#C9A99A"/>
+              <path d="M34 45 L66 45 L64 100 L36 100 Z" fill="#EDE3D4" opacity="0.9"/>
+              <circle cx="46" cy="60" r="2.5" fill="none" stroke="#B8935A" stroke-width="0.8"/>
+              <circle cx="54" cy="60" r="2.5" fill="none" stroke="#8B2635" stroke-width="0.8"/>
+              <circle cx="50" cy="70" r="2.5" fill="none" stroke="#9B7E8C" stroke-width="0.8"/>
+              <path d="M36 100 C30 120 14 158 8 240 L92 240 C86 158 70 120 64 100 Z" fill="#C9A99A" opacity="0.75"/>
+              <path d="M36 52 L24 95" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+              <path d="M64 52 L76 95" stroke="#C9A99A" stroke-width="7" stroke-linecap="round"/>
+            </g>
+            <!-- collection label -->
+            <text x="250" y="395" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#8B2635" letter-spacing="4" opacity="0.7">TIERRA SS26</text>
+          </svg>
+        </div>
+        <div class="project-content">
+          <div class="project-year">2025–2026 · Academic Collection</div>
+          <h3 class="project-name">Tierra SS26</h3>
+          <p class="project-desc">
+            A 12-piece ready-to-wear capsule collection inspired by the geological landscapes of the California desert. Each garment was draped, constructed, and dyed using natural pigments sourced locally — blending earthy terracotta tones with architectural silhouettes that echo desert erosion and canyon strata.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag">Ready-to-Wear</span>
+            <span class="project-tag">Natural Dyes</span>
+            <span class="project-tag">Sustainable</span>
+            <span class="project-tag">Pattern Drafting</span>
+            <span class="project-tag">CLO3D</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CONTACT ═══════════════════ -->
+<section id="contact">
+  <div class="contact-left reveal">
+    <div class="section-tag">Get in Touch</div>
+    <div class="contact-big">Let's<br><em>Create</em><br>Together</div>
+  </div>
+  <div class="contact-right reveal">
+    <p class="contact-intro">
+      Open to collaborations, internship opportunities, and creative conversations. Based in Los Angeles — available worldwide.
+    </p>
+    <div class="contact-links">
+
+      <a href="mailto:p25334@psuca.edu" class="contact-link">
+        <div class="contact-link-left">
+          <div class="contact-icon">✉</div>
+          <div>
+            <span class="contact-label">Email</span>
+            <span class="contact-val">p25334@psuca.edu</span>
+          </div>
+        </div>
+        <span class="contact-arrow">→</span>
+      </a>
+
+      <a href="https://www.linkedin.com/in/kiran-barkat-b84909201" target="_blank" class="contact-link">
+        <div class="contact-link-left">
+          <div class="contact-icon" style="font-weight:700;font-size:0.75rem;">in</div>
+          <div>
+            <span class="contact-label">LinkedIn</span>
+            <span class="contact-val">Kiran Barkat</span>
+          </div>
+        </div>
+        <span class="contact-arrow">→</span>
+      </a>
+
+      <a href="https://github.com/grapedigital12/KiranBarkat#kiranbarkat" target="_blank" class="contact-link">
+        <div class="contact-link-left">
+          <div class="contact-icon" style="font-size:1rem;">⌥</div>
+          <div>
+            <span class="contact-label">GitHub</span>
+            <span class="contact-val">grapedigital12 / KiranBarkat</span>
+          </div>
+        </div>
+        <span class="contact-arrow">→</span>
+      </a>
+
+      <a href="https://drive.google.com/drive/mobile/my-drive?dmr=1&ec=wgc-drive-%5Bmodule%5D-goto&pli=1" target="_blank" class="contact-link">
+        <div class="contact-link-left">
+          <div class="contact-icon">↓</div>
+          <div>
+            <span class="contact-label">Resume</span>
+            <span class="contact-val">View / Download CV</span>
+          </div>
+        </div>
+        <span class="contact-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-name">Kiran Barkat</span>
+  <span class="footer-copy">© 2026 · Fashion Designer · Los Angeles, CA · Built with intention</span>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-5}px,${my-5}px)`; });
+  function animRing(){ rx+=(mx-rx)*0.15;ry+=(my-ry)*0.15;ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;requestAnimationFrame(animRing); }
+  animRing();
+
+  // Reveal on scroll
+  const reveals=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{ if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*80); });
+  },{threshold:0.08});
+  reveals.forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
